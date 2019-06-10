@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>信息修改</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link rel="stylesheet" href="../../css/public.css" />
+	<link rel="stylesheet" href="../../css/common.css" />
+	<style>
+		body {
+			background: #fff;
+		}
+
+		.save-btn {
+			width: 5rem;
+			height: 2.5rem;
+			line-height: 2.5rem;
+			font-size: 1.2rem;
+			color: #fff;
+			background: #ff9694;
+			border-radius: 0.25rem;
+			overflow: hidden;
+			position: absolute;
+			top: 0.25rem;
+			right: 1.5rem;
+		}
+
+		.modifyBox {
+			width: auto;
+			margin: 2rem 1rem;
+			overflow: hidden;
+			border-radius: 0.25rem;
+			border: 1px solid #CCC;
+		}
+
+		.modifyBox textarea {
+			width: 90%;
+			height: 8rem;
+			margin: 5%;
+			line-height: 1.5;
+			font-size: 1.2rem;
+			color: #666;
+			outline: none;
+			resize: none;
+			border: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- <div class="SquareHeaderS">
+		<div class="SquareHeader">
+			<div class="save-btn">保存</div>
+			<p class="p2"></p>
+			<div class="SquareHeaderDIV">修改信息</div>
+		</div>
+	</div>
+	<img class="SquareImg" src="../../images/gct_02.jpg"> -->
+
+
+	<div class="roofS">
+		<div class="roof">
+			<div class="roofButton">保存</div>
+			<div class="roofReturn"></div>
+			<!-- <div class="roofSearch"></div>
+			<div class="roofMessage messageU"></div> -->
+			<div class="roofConter">
+				修改信息
+			</div>
+		</div>
+	</div>
+	<div class="roofSDiv"></div>
+	<div class="modifyBox">
+		<textarea id="setting" placeholder=""></textarea>
+	</div>
+
+	<script type="text/javascript" src="../../script/api.js"></script>
+	<script type="text/javascript" src="../../script/jquery.min.js"></script>
+	<script type="text/javascript" src="../../script/PublicCss.js"></script>
+	<script type="text/javascript" src="../../script/config.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+			$api.fixStatusBar($api.dom('.roofS'));
+			// 列表距顶部距离
+			var systemType = api.systemType;
+			if (systemType == "android") {
+				$(".roofSDiv").css("height", "" + ($(".roofS").height() + 30) + "px");
+			}
+			if (systemType == "ios") {
+				$(".roofSDiv").css("height", "" + ($(".roofS").height() + 40) + "px");
+			}
+
+			$api.setStorage('openWin', "updatesetting");
+			//返回箭头事件
+			$(".roofReturn").click(function() {
+				api.closeWin({
+					name: 'updatesetting'
+				});
+			});
+
+			//滑动关闭
+			api.addEventListener({
+				name: 'swiperight'
+			}, function(ret, err) {
+				api.closeWin({
+					name: 'updatesetting'
+				});
+			});
+
+			var userid = api.pageParam.userid;
+			var title = api.pageParam.title;
+			var vaule = api.pageParam.vaule;
+			var type = api.pageParam.type;
+
+			$(".roofConter").html(title);
+			$("#setting").prop("placeholder", vaule);
+
+			$("#setting").keyup(function() {
+				if (type == "weight" || type == "height") {
+					var no = $(this).val();
+					if (no != '' && no.substr(0, 1) == '.') {
+						no = "";
+					}
+					no = no.replace(/^0*(0\.|[1-9])/, '$1'); //解决 粘贴不生效
+					no = no.replace(/[^\d]/g, ""); //清除“数字”和“.”以外的字符
+					if (no.indexOf(".") < 0 && no != "") { //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+						if (no.substr(0, 1) == '0' && no.length == 2) {
+							no = no.substr(1, no.length);
+						}
+					}
+					$(this).val(no);
+				}
+			});
+			$("#setting").focus();
+
+			//提交表单
+			$(".roofButton").click(function() {
+				var setting = $("#setting").val();
+				if (setting == null || setting == "") {
+					api.toast({
+						msg: '请输出修改的内容！',
+						duration: 1000,
+						location: 'middle'
+					});
+					return false;
+				}
+				var update = {};
+				update.userid = userid;
+				update[type] = setting;
+				//提交表单
+				api.ajax({
+					url: CONFIG.ADDRURL + CONFIG.UPDATEUSERINFO,
+					method: 'post',
+					data: {
+						values: update
+					}
+				}, function(data) {
+					if (data.code == "200") {
+						if ("nickname" == type) {
+							$api.setStorage('nickname', setting);
+						}
+						api.closeWin({
+							name: 'updatesetting'
+						});
+						api.sendEvent({
+							name: 'infosetting',
+						});
+					} else {
+						api.toast({
+							msg: data.msg,
+							duration: 1000,
+							location: 'middle'
+						});
+					}
+				});
+			});
+		};
+	</script>
+</body>
+
+</html>

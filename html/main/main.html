@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0 user-scalable=no" />
+    <link href="../../css/swiper.min.css" rel="stylesheet" />
+    <link href="../../css/public.css" rel="stylesheet" />
+    <link href="../../css/soul_main.css" rel="stylesheet" />
+    <link href="../../css/common.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../script/doT.min.js"></script>
+</head>
+<style media="screen">
+    html,
+    body {
+        background-color: #fff;
+    }
+
+    .roofConter {
+        height: 50px;
+        line-height: 50px;
+        box-sizing: border-box;
+        padding: 0 10px;
+    }
+
+    .main {
+        padding-bottom: 50px;
+    }
+
+    .sexImg {
+        width: 15px;
+        height: 15px;
+        float:left;
+        margin: 0 2px 0 2px
+    }
+</style>
+
+<body onclick="close()">
+    <header>
+        <div class="roofS">
+            <!-- 搜索 -->
+            <div class="roofConter index-search">
+                <img src="../../images/search_icon.png" />
+                <input id="search" type="text" placeholder="请输入您要搜索的内容" />
+            </div>
+        </div>
+        <div class="roofSDiv"></div>
+    </header>
+    <section class="main">
+        <!--  轮播 -->
+        <div class="focus-bg">
+            <!-- <div class="focus-imgList">
+                <img src="../../images/focus1.png">
+            </div> -->
+
+            <div class="swiper-container">
+                <div class="swiper-wrapper lunboImg">
+                    <script type="text/template" id="bannerImg">
+                        {{~it:value:index}} {{? value.type=="lunbo_pic"}}
+                        <div class="swiper-slide bannerImg" urlPath="{{= value.remark}}">
+                            <div class="focus-imgList">
+                                <img src=" {{= value.value}}">
+                            </div>
+                        </div>
+                        {{?}} {{~}}
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- 图标菜单 -->
+        <div class="iconList">
+            <ul class="flex-r">
+                <li onclick="tuanti()">
+                    <div class="model">
+                        <img src="../../images/img01.png">
+                        <p class="modelText">团体活动</p>
+                    </div>
+                </li>
+                <li onclick="goMemberCenter()">
+                    <div class="model">
+                        <img src="../../images/img02.png">
+                        <p class="modelText">升级会员</p>
+                    </div>
+                </li>
+                <li onclick="findFriend()">
+                    <div class="model">
+                        <img src="../../images/img03.png">
+                        <p class="modelText">一键匹配</p>
+                    </div>
+                </li>
+                <li onclick="getMoney()">
+                    <div class="model">
+                        <img src="../../images/img04.png">
+                        <p class="modelText">赚取金币</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- 头条 -->
+        <!-- <div class="toutiao">
+            <span>头条</span>
+            <span>忙忙碌碌挤出点时间发布一组作品…</span>
+        </div> -->
+        <!-- 热门推荐 -->
+        <!-- 标题 -->
+        <div class="title" style="margin-top:25px" >
+            <h2>会员推荐</h2>
+            <img src="../../images/gengduo_icon2.png" id="recuser">
+            <div class="myClear"></div>
+        </div>
+        <div class="palerList">
+            <div class="list">
+                <ul id="recommend">
+                    <script type="text/template" id="recommendtemplate">
+                        {{~it:value:index}}
+                        <li>
+                            <div class="img-bg">
+                                <img src="{{=value.personbgpic}}" class="userdetail" userid="{{=value.userid}}">
+                                <div class="userinfo flex-r">
+                                    <div class="headImg userdetailIn" userid="{{=value.userid}}">
+                                        <img src="{{=value.avatar}}">
+                                    </div>
+                                    <div class="userName flex-r">
+                                        <span>{{=value.nickname}}</span>
+                                        <span class="flex-r">
+                                          {{? value.gender ==1}}
+                                          <img src="../../images/sex_woman.png"/>{{=value.age}}</span> {{?? value.gender ==0}}
+                                        <img src="../../images/sex_man.png" />{{=value.age}}</span>
+                                        {{??}} {{?}}
+                                    </div>
+                                </div>
+                                <div class="juliinfo flex-r">
+                                    <img src="../../images/paler_juli.png">
+                                    <span>距离我{{=value.distance}}KM</span>
+                                </div>
+                                <div class="taginfo">
+                                    <span>吃饭</span>
+                                    <span>看电影</span>
+                                    <span>KTV</span>
+                                    <span>游戏</span>
+                                </div>
+
+                                <div class="music" data-id="{{=value.userid}}">
+                                    <img src="../../images/paler_music.png">
+                                </div>
+                                <div class="gift" onclick="sendgift('{{=value.userid}}')">
+                                    <img src="../../images/paler_gift.png">
+                                </div>
+                            </div>
+                            <!-- <div class="text-bg">
+                                <p>{{=value.bio}}…</p>
+                                <p userid="{{=value.userid}}" class="userdetail">了解一下<img src="../../images/paler_jia.png"></p>
+                            </div> -->
+                        </li>
+                        {{~}}
+                    </script>
+                </ul>
+            </div>
+        </div>
+        <!--热门推荐结束 -->
+        <!--热门邀请开始 -->
+        <!-- 标题 -->
+        <div class="title">
+            <h2>会员邀请</h2>
+            <img class="travel" src="../../images/gengduo_icon2.png">
+            <div class="myClear"></div>
+        </div>
+        <!-- <div class="yaoqingList"> -->
+        <div class="hortList" id="invitor">
+            <script type="text/template" id="invitationtemplate">
+                {{~it:value:index}}
+                {{? value.avatar != null}}
+                <div class="hortListModel">
+                    <div class="hortListModelTop" userid="{{=value.userid}}">
+                        <div class="hortListModeTopImg">
+                            <img class="hortListModeTopHeader" src="{{=value.avatar}}" />
+                        </div>
+                        <div class="hortListModeTopContent">
+                            <div class="hortListModeTopContentTop">
+                                <span class="hortListModelName">{{=value.nickname}}</span>
+                                <!-- <span class="sexText"> -->
+                                    {{? value.gender ==1}}
+                                      <img class="sexImg" src="../../images/sex_woman2.png"/>
+                                      <!-- {{=value.age}} -->
+                                  <!-- </span>  -->
+                                  {{?? value.gender ==0}}
+                                <!-- <span class="sexText"> -->
+                                      <img class="sexImg" src="../../images/sex_man2.png" />
+                                      <!-- {{=value.age}} -->
+                                      {{??}} {{?}}
+                                    <!-- </span>  -->
+
+                                <!-- 判断学历 -->
+                                <!-- <span> -->
+                             {{? value.educationauth ==0 }}
+                                 <img class="sexImg" src="../../images/Datashape14.png"/>
+                               <!-- </span>  -->
+                               {{?}}
+                                <!-- 判断邮箱 -->
+                                <!-- <span> -->
+                           {{? value.emailauth == 0 }}
+                           <img class="sexImg" src="../../images/Datashape13.png"/>
+                         <!-- </span>  -->
+                         {{?}}
+                                <!-- 判断微信 -->
+                                <!-- <span> -->
+                           {{? value.wxauth == 0 }}
+                           <img class="sexImg" src="../../images/Datashape12.png"/>
+                         <!-- </span> -->
+                         {{?}}
+                                <!-- 判断手机号 -->
+                                <!-- <span> -->
+                          {{? value.mobieauth == 0 }}
+                          <img class="sexImg" src="../../images/Datashape10.png"/>
+                        <!-- </span> -->
+                        {{?}}
+                                <!-- 判断身份 -->
+                                <!-- <span> -->
+                          {{? value.idcardauth == 0 }}
+                          <img class="sexImg" src="../../images/Datashape11.png"/>
+                        <!-- </span> -->
+                        {{?}}
+                            </div>
+                            <div class="hortListModeTopContentBottom">
+                                <img class="hortListModeTopContentBottomImg" src="../../images/address_icon.png" /><span class="distance">距离我{{=value.distance}}KM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hortListModelTopBottom" invitationid="{{=value.id}}" userid="{{=value.userid}}">
+                        <div class="hortListModelTopBottomLeft">
+                            <img src="{{=value.img}}" />
+                        </div>
+                        <div class="hortListModelTopBottomRight">
+                            <div class="hortListModelTopBottomRightTitle">{{=value.content}}</div>
+                            <div class="hortListModelTopBottomRightContent">{{=value.bio}}</div>
+                            <div class="hortListModelTopBottomRightTime">
+                                <p class="go">发布时间</p>
+                                <p class="goTime">{{=value.starttime}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{?}}
+                {{~}}
+            </script>
+        </div>
+        <!-- </div> -->
+        <!--热门邀请结束 -->
+        <!-- 底部大图片展示 -->
+        <div class="bot-img">
+            <div class="swiper-container">
+                <div class="swiper-wrapper bottomLunbo">
+                    <script type="text/template" id="bannerPicture">
+                        {{~it:value:index}} {{? value.type=="merchant_pic"}}
+                        <div class="swiper-slide urlImg" urlPath="{{= value.remark}}">
+                            <div class="focus-imgList">
+                                <img class="bot-imgImg" src=" {{= value.value}}">
+                            </div>
+                        </div>
+                        {{?}} {{~}}
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../script/PublicCss.js"></script>
+<script type="text/javascript" src="../../script/config.js"></script>
+<script type="text/javascript" src="../../script/util.js"></script>
+<script type="text/javascript" src="../../script/timeChange.js"></script>
+<script type="text/javascript" src="../../script/swiper.min.js"></script>
+<script type="text/javascript">
+    // 播放音频
+    $('#recommend').on('touchstart', ".music", function() {
+            var audioStreamer = api.require('audioStreamer')
+            var status = $(this).attr('data-status')
+            if (status == "play") {
+                audioStreamer.stop()
+                $(this).find('img').attr('src', '../../images/paler_music.png')
+                $('#recommend .music').attr('data-status', "stop")
+                $(this).attr('data-status', "stop")
+            } else {
+                $('#recommend .music').attr('data-status', "stop")
+                $(this).attr('data-status', "play")
+                audioStreamer.stop()
+                $('#recommend .music').find('img').attr('src', '../../images/paler_music.png')
+                $(this).find('img').attr('src', '../../images/paler_music_play.gif')
+                var id = $(this).attr('data-id')
+                api.ajax({
+                    url: CONFIG.ADDRURL + CONFIG.GETUSERINFO,
+                    method: 'post',
+                    data: {
+                        values: {
+                            userid: id
+                        }
+                    }
+                }, function(res, err) {
+                    if (res) {
+                        // console.log(JSON.stringify(res))
+                        if (res.userinfo.voiceurl||res.userinfo.voiceurl!="") {
+                            audioStreamer.openPlayer({
+                                path: res.userinfo.voiceurl,
+                            });
+                        }
+                    } else {
+                        // console.log(JSON.stringify(err))
+                    }
+                });
+            }
+        })
+        //会员中心
+    function goMemberCenter() {
+        api.openWin({
+            name: 'membercenter',
+            url: '../member/membercenter.html',
+            pageParam: {
+
+            }
+        });
+    }
+    //团体活动
+    function tuanti() {
+        api.openWin({
+            name: 'squareSquare',
+            url: '../community/Square.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight - 48
+            },
+            pageParam: {
+                id: "1"
+            }
+        });
+    }
+    //一键匹配
+    function findFriend() {
+        api.openWin({
+            name: 'radar',
+            url: '../radar.html',
+            pageParam: {
+
+            }
+        });
+    }
+
+    // 赚取金币
+    function getMoney() {
+        api.openWin({
+            name: 'MyPromotion',
+            url: '../mine/MyPromotion.html',
+            pageParam: {
+
+            }
+        });
+    }
+    //约她
+    function goYueTa() {
+        api.openWin({
+            name: 'appointment',
+            url: '../DateInvitation/appointment.html',
+            pageParam: {
+
+            }
+        });
+    }
+        $('body').on('touchstart', '.mask', function() {
+            api.closeFrame({
+                name: 'gift'
+            })
+            $('.mask').remove()
+        })
+        //赠送礼物
+    function sendgift(id) {
+        if ($api.getStorage('userid') == null || $api.getStorage('userid') == "") {
+            api.toast({
+                msg: '请先登录！',
+                duration: 1000,
+                location: 'middle'
+            });
+            setTimeout(function() {
+                api.openWin({
+                    name: 'login',
+                    url: '../../login.html',
+                    bgColor: "rgba(255, 255, 255, 0)",
+                    animation: {
+                        type: "push", //动画类型（详见动画类型常量）
+                        subType: "from_right", //动画子类型（详见动画子类型常量）
+                        duration: 300 //动画过渡时间，默认300毫秒
+                    }
+                });
+            }, 1000);
+            return false;
+        }
+        api.openFrame({
+            name: 'gift',
+            url: '../gift.html',
+            rect: {
+                w: 'auto',
+                h: 'auto',
+                marginLeft: 0, //相对父页面左外边距的距离，数字类型
+                // marginTop: 0,     //相对父页面上外边距的距离，数字类型
+                marginBottom: 0, //相对父页面下外边距的距离，数字类型
+                marginRight: 0 //相对父页面右外边距的距离，数字类型
+            },
+            pageParam: {
+                userid: id
+            },
+            animation: {
+                type: "push",
+                subType: "from_bottom",
+                duration: 300
+            }
+        });
+    }
+    apiready = function() {
+        api.addEventListener({
+            name: 'stopmusic'
+        }, function(ret, err) {
+            $('#recommend .music').find('img').attr('src', '../../images/paler_music.png')
+            $('#recommend .music').attr('data-status', "stop")
+            var audioStreamer = api.require('audioStreamer')
+            audioStreamer.stop()
+        });
+        $api.fixStatusBar($api.dom('.roofS'));
+        // 列表距顶部距离
+        var systemType = api.systemType;
+        if (systemType == "android") {
+            $(".roofSDiv").css("height", "" + ($(".roofS").height() + 30) + "px");
+        }
+        if (systemType == "ios") {
+            $(".roofSDiv").css("height", "" + ($(".roofS").height() + 40) + "px");
+            $(".mains").css("height", "1px");
+        }
+
+
+        $('.palerList').on('touchstart', function(e) {
+            api.setFrameGroupAttr({
+                name: 'group',
+                scrollEnabled: false
+            });
+        });
+        $('.palerList').on('touchend', function(e) {
+            api.setFrameGroupAttr({
+                name: 'group',
+                scrollEnabled: true
+            });
+        });
+
+        //加载轮播图
+        api.ajax({
+                url: CONFIG.ADDRURL + CONFIG.BANNER,
+                method: 'post',
+                data: {
+                    values: {
+
+                    }
+                }
+            },
+            function(data) {
+              // console.log(JSON.stringify(data))
+                if (data.code == "200") {
+                    var tempFn = doT.template($api.byId('bannerImg').innerHTML);
+                    var resultHTML = tempFn(data.headimg);
+                    $(".lunboImg").append(resultHTML);
+                    var banner = new Swiper('.focus-bg .swiper-container', {
+                        pagination: '.swiper-pagination',
+                        autoplay: 5000
+                    });
+                }
+            });
+
+
+
+
+        //加载底部广告图
+        api.ajax({
+                url: CONFIG.ADDRURL + CONFIG.BANNER,
+                method: 'post',
+                data: {
+                    values: {
+
+                    }
+                }
+            },
+            function(data) {
+                if (data.code == "200") {
+                    var tempFn = doT.template($api.byId('bannerPicture').innerHTML);
+                    var resultHTML = tempFn(data.headimg);
+                    $(".bottomLunbo").append(resultHTML);
+                    var banner = new Swiper('.bot-img .swiper-container', {
+                        pagination: '.swiper-pagination',
+                        autoplay: 5000
+                    });
+                }
+            });
+        //底部轮播跳转
+        $('body').on('touchstart', '.urlImg', function() {
+            var url = $(this).attr("urlPath")
+            if (url != "null") {
+                api.openWin({
+                    name: 'baidu',
+                    url: "http://" + url + ""
+                });
+            } else {
+                return false
+            }
+        })
+        $('body').on('touchstart', '.bannerImg', function() {
+            var url = $(this).attr("urlPath")
+            if (url != "null") {
+                api.openWin({
+                    name: 'baidu',
+                    url: "http://" + url + ""
+                });
+            } else {
+                return false
+            }
+        })
+        var filter = {
+            type: 1,
+            pagesize: 30,
+            pagenum: 1,
+            status: "2",
+            // position: $api.getStorage('position')
+            position: "108.9534750000,34.2675560000"
+        };
+        api.ajax({
+            url: CONFIG.ADDRURL + CONFIG.GETSERVICESPEOPLE,
+            method: 'post',
+            data: {
+                values: filter,
+            },
+        }, function(data, err) {
+            if (data) {
+                // console.log(JSON.stringify(data.servicespeople.list));
+                $.each(data.servicespeople.list, function(i, n) {
+                    if (n.photos == null) {
+                        return false;
+                    }
+                    if (n.photos.substr(n.photos.length - 1, 1) == ",") {
+                        n.photos = n.photos.substr(0, n.photos.length - 1);
+                    }
+                    n.photos = n.photos.split(",");
+                    if (n.servicetags.substr(n.servicetags.length - 1, 1) == ",") {
+                        n.servicetags = n.servicetags.substr(0, n.servicetags.length - 1);
+                    }
+                    n.servicetags = n.servicetags.split(",");
+                });
+                var tempFn = doT.template($api.byId('recommendtemplate').innerHTML);
+                var resultHTML = tempFn(data.servicespeople.list);
+                $("#recommend").append(resultHTML);
+            } else {
+                // console.log(JSON.stringifty(err));
+            }
+        });
+        //获取邀请列表
+        var ivfilter = {
+            type: 1,
+            pagesize: 5,
+            pagenum: 1,
+            status: "2",
+            imgfilter: 1,
+            position: "108.9534750000,34.2675560000"
+        };
+        api.ajax({
+                url: CONFIG.ADDRURL + CONFIG.GETINVITATIONS,
+                method: 'post',
+                data: {
+                    values: ivfilter,
+                    imgfilter: 1
+                }
+            },
+            function(data, err) {
+                // console.log(JSON.stringify(data));
+                if (data.code == "200" && data.invitations && data.invitations.list) {
+                    invitationHasNextPage = data.invitations.hasNextPage;
+                    invitationPageNum = data.invitations.nextPage;
+                    $.each(data.invitations.list, function(i, n) {
+                        n.starttime = timestampToTime(n.starttime);
+                        n.endtime = timestampToTime(n.endtime);
+                        n.createtime = timestampToTime(n.createtime);
+                    });
+
+                    for (var i = 0; i < data.invitations.list.length; i++) {
+                        var str = data.invitations.list[i].photos
+                        var arr = str.split(",")
+                        data.invitations.list[i].img = arr[0]
+                            // console.log(arr)
+                    }
+                    var tempFn = doT.template($api.byId('invitationtemplate').innerHTML);
+                    var resultHTML = tempFn(data.invitations.list);
+                    $("#invitor").append(resultHTML);
+                }
+            });
+        //推荐更多
+          $(document).on("touchstart", "#recuser", function() {
+            api.openWin({
+                name: 'DateInvitation',
+                url: '../DateInvitation/DateInvitation.html',
+                bgColor: "rgba(255, 255, 255, 0)",
+                animation: {
+                    type: "push", //动画类型（详见动画类型常量）
+                    subType: "from_right", //动画子类型（详见动画子类型常量）
+                    duration: 300 //动画过渡时间，默认300毫秒
+                },
+                pageParam: {
+                    name: 'main',
+                    tap: 1
+                }
+            });
+        });
+        //邀请更多列表
+        $(document).on("touchstart", ".travel", function() {
+            api.openWin({
+                name: 'DateInvitation',
+                url: '../DateInvitation/DateInvitation.html',
+                bgColor: "rgba(255, 255, 255, 0)",
+                animation: {
+                    type: "push", //动画类型（详见动画类型常量）
+                    subType: "from_right", //动画子类型（详见动画子类型常量）
+                    duration: 300 //动画过渡时间，默认300毫秒
+                },
+                pageParam: {
+                    name: 'main',
+                    tap: 2
+                }
+            });
+        });
+
+        //会员跳转
+        $("#recommend").on("touchstart", ".userdetail", function() {
+            var userid = $(this).attr("userid");
+            api.openWin({
+                name: 'otherspage',
+                url: '../otherspage.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                pageParam: {
+                    userid: userid
+                },
+                reload: true,
+                animation: {
+                    type: "push", //动画类型（详见动画类型常量）
+                    subType: "from_right", //动画子类型（详见动画子类型常量）
+                    duration: 300 //动画过渡时间，默认300毫秒
+                }
+            });
+        });
+          //搜索框
+        var systemType = api.systemType
+        if(systemType == "ios"){
+          $("#search").blur('keypress', function(e) {
+              var keycode = e.keyCode;
+              //获取搜索框的值
+              var searchContent = $(this).val();
+              api.openWin({
+                  name: 'search',
+                  url: '../search.html',
+                  bgColor: "rgba(255, 255, 255, 0)",
+                  animation: {
+                      type: "push", //动画类型（详见动画类型常量）
+                      subType: "from_right", //动画子类型（详见动画子类型常量）
+                      duration: 300 //动画过渡时间，默认300毫秒
+                  },
+                  pageParam: {
+                      keywords: searchContent
+                  }
+              });
+
+          });
+        }else{
+          $("#search").on('keypress', function(e) {
+              var keycode = e.keyCode;
+              //获取搜索框的值
+              var searchContent = $(this).val();
+              api.openWin({
+                  name: 'search',
+                  url: '../search.html',
+                  bgColor: "rgba(255, 255, 255, 0)",
+                  animation: {
+                      type: "push", //动画类型（详见动画类型常量）
+                      subType: "from_right", //动画子类型（详见动画子类型常量）
+                      duration: 300 //动画过渡时间，默认300毫秒
+                  },
+                  pageParam: {
+                      keywords: searchContent
+                  }
+              });
+
+          });
+        }
+
+
+
+        //打开详情
+        $(document).on("touchstart", ".hortListModelTop,.userdetailIn", function() {
+            var userid = $(this).attr("userid");
+            api.openWin({
+                name: 'appointmentdetail',
+                url: '../DateInvitation/appointmentdetail.html',
+                bgColor: "rgba(255, 255, 255, 0)",
+                animation: {
+                    type: "push", //动画类型（详见动画类型常量）
+                    subType: "from_right", //动画子类型（详见动画子类型常量）
+                    duration: 300 //动画过渡时间，默认300毫秒
+                },
+                pageParam: {
+                    userid: userid
+                }
+            });
+        });
+
+        //打开详情2
+        $(document).on("touchstart", ".hortListModelTopBottom", function() {
+            var userid = $(this).attr("userid");
+            var invitationid = $(this).attr("invitationid");
+            api.openWin({
+                name: 'invitationdetail',
+                url: '../DateInvitation/invitationdetail.html',
+                bgColor: "rgba(255, 255, 255, 0)",
+                animation: {
+                    type: "push", //动画类型（详见动画类型常量）
+                    subType: "from_right", //动画子类型（详见动画子类型常量）
+                    duration: 300 //动画过渡时间，默认300毫秒
+                },
+                pageParam: {
+                    userid: userid,
+                    invitationid: invitationid
+                }
+            });
+        });
+
+
+    }
+</script>
+
+</html>

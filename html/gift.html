@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>礼物</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="../css/public.css" />
+    <link rel="stylesheet" href="../css/swiper.min.css" />
+    <link href="../css/gift.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="gift">
+        <div class="gift-head">
+            <div class="gift-head-left">金币余额<span><i id="currency">125</i><img src="../images/gift/coin.png"></span>
+            </div>
+            <div class="gift-head-right" onclick="recharge()">金币不够了，去充值</div>
+        </div>
+        <div class="gift-con">
+            <div class="gift-con-left">
+                <div class="gift-tab">
+                    <span class="active">礼物</span>
+                    <span>VIP特权</span>
+                    <span>我收到的礼物</span>
+                </div>
+            </div>
+            <div class="gift-con-right" onclick="getvip()">
+                <img src="../images/gift/vip.png">成为VIP
+            </div>
+        </div>
+        <div class="gift-list" id="giftlist">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <script type="text/template" id="gittemplate">
+                        {{~it:value:index}}
+                    <div class="swiper-slide">
+                        <div class="item" data-id="{{=value.id}}">
+                            <div class="img"><img src="{{=value.giftImg}}"></div>
+                            <p>{{=value.giftName}}</p>
+                            <span>{{=value.giftPrice}}<img src="../images/gift/coin.png"></span>
+                        </div>
+                    </div>
+                    {{~}}
+                </script>
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+            </div>
+        </div>
+        <div class="gift-bottom">
+            <div class="num">
+                <span>数量</span>
+                <input type="text" id="num" value="1">
+            </div>
+            <button onclick="send()">送出</button>
+        </div>
+    </div>
+    <div class="mask"></div>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/config.js"></script>
+    <script type="text/javascript" src="../script/swiper.min.js"></script>
+    <script type="text/javascript" src="../script/jquery.min.js"></script>
+    <script type="text/javascript" src="../script/doT.min.js"></script>
+
+    <script>
+        function getvip() {
+            api.openWin({
+                name: 'membercenter',
+                url: 'member/membercenter.html',
+            });
+            api.closeFrame({
+                name: 'gift'
+            })
+        }
+
+        function recharge() {
+            api.openWin({
+                name: 'MyGoldCoin',
+                url: 'mine/MyGoldCoin.html',
+            });
+            api.closeFrame({
+                name: 'gift'
+            })
+        }
+        $(".gift-list").on('touchstart', '.item', function () {
+            $(".gift-list").find('.on').removeClass('on')
+            $(this).addClass('on')
+        })
+
+        $('.mask').click(function(){
+            api.closeFrame({
+                name: 'gift'
+            })
+        })
+
+        function send() {
+            if (!$('.swiper-wrapper .on').attr('data-id')) {
+                api.toast({
+                    msg: '请选择要送出的礼物！',
+                    duration: 1000,
+                    location: 'middle'
+                })
+                return
+            }
+            api.ajax({
+                url: CONFIG.ADDRURL + CONFIG.POSTGIFTS,
+                method: 'post',
+                data: {
+                    values: {
+                        giftId: $('.swiper-wrapper .on').attr('data-id'),
+                        giftNum: $('#num').val(),
+                        giveUserId: $api.getStorage('userid'),
+                        getUserId: api.pageParam.userid
+                    }
+                }
+            }, function (res, err) {
+                if (res) {
+                    if (res.code == 200) {
+                        api.toast({
+                            msg: res.msg,
+                            duration: 1000,
+                            location: 'middle'
+                        })
+                        api.closeFrame({
+                            name: 'gift'
+                        })
+                    } else {
+                        api.toast({
+                            msg: res.msg,
+                            duration: 1000,
+                            location: 'middle'
+                        })
+                    }
+                } else {
+                    console.log(JSON.stringify(err))
+                }
+            });
+        }
+        apiready = function () {
+            var userid = $api.getStorage('userid');
+            api.ajax({
+                url: CONFIG.ADDRURL + CONFIG.GIFT,
+                method: 'post',
+                data: {
+                    values: {
+                        userId: userid
+                    }
+                }
+            }, function (res, err) {
+                if (res) {
+                    if (res.code == 200) {
+                        var tempFn = doT.template($api.byId('gittemplate').innerHTML);
+                        var resultHTML = tempFn(res.giftList);
+                        $("#giftlist .swiper-wrapper").html(resultHTML);
+                        new Swiper('.gift-list .swiper-container', {
+                            pagination: '.swiper-pagination',
+                            slidesPerView: 3,
+                            slidesPerColumn: 2,
+                        });
+                        $api.byId('currency').innerHTML = res.currency
+                    }
+                } else {
+                    console.log('错误');
+                }
+            });
+
+        }
+    </script>
+
+
+</body>
+
+</html>
