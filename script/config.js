@@ -1,5 +1,5 @@
 var CONFIG = {
-    ADDRURL: "http://192.168.0.210:8079/", //接口服务端口
+    ADDRURL: "http://192.168.0.119:8079/", //接口服务端口
     QINIUADDR: "http://95youhe.com/",
     SHAREADDR: "http://soul.95youhe.com:8096/",
     //支持的银行

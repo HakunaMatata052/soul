@@ -466,7 +466,6 @@
                             }
                         });
                 } else {
-<<<<<<< .mine
                     api.ajax({
                             url: CONFIG.ADDRURL + CONFIG.COMMENT,
                             method: 'post',
@@ -499,72 +498,6 @@
                                 });
                             }
                         });
-||||||| .r78
-                    api.ajax({
-                            url: CONFIG.ADDRURL + CONFIG.COMMENT,
-                            method: 'post',
-                            data: {
-                                values: {
-                                    activityid: momentid,
-                                    passiveuserid: userid,
-                                    userid: $api.getStorage('userid'),
-                                    commenttype: 1,
-                                    commentcontent: "喜欢",
-                                    isOffical: 1
-                                }
-                            }
-                        },
-                        function(data, err) {
-                            if (data.code == "200") {
-                                $(dianzan).attr("src", "../../images/SquarePL_09.png").attr("isdianzan", "true");
-                                dianzanPageNum = 1;
-                                getdianzan(momentid, dianzanPageSize, dianzanPageNum, true);
-                                api.sendEvent({
-                                    name: 'refreshSquare'
-                                });
-                                api.sendEvent({
-                                    name: "sendTextMessageListener",
-                                    extra: {
-                                        touserid: userid,
-                                        message: "系统提示：当前人对你的动态点赞了，快去看看吧！"
-                                    }
-                                });
-                            }
-                        });
-=======
-                  api.ajax({
-                    url: CONFIG.ADDRURL + CONFIG.COMMENT,
-                    method: 'post',
-                    data: {
-                      values: {
-                        activityid: momentid,
-                        passiveuserid: userid,
-                        userid: $api.getStorage('userid'),
-                        commenttype: 1,
-                        commentcontent: "喜欢",
-                        isOffical: 1
-                      }
-                    }
-                  },
-                  function(data, err) {
-                    if (data.code == "200") {
-                    isclick= true
-                      $(dianzan).attr("src", "../../images/SquarePL_09.png").attr("isdianzan", "true");
-                      dianzanPageNum = 1;
-                      getdianzan(momentid, dianzanPageSize, dianzanPageNum, true);
-                      api.sendEvent({
-                        name: 'refreshSquare'
-                      });
-                      api.sendEvent({
-                        name: "sendTextMessageListener",
-                        extra: {
-                          touserid: userid,
-                          message: "系统提示：当前人对你的动态点赞了，快去看看吧！"
-                        }
-                      });
-                    }
-                  });
->>>>>>> .r80
                 }
 
 
